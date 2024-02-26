@@ -1,0 +1,66 @@
+version: '2.2'
+
+services:
+  db:
+    image: mysql:5.7
+    container_name: Mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'db'
+      # So you don't have to use root, but you can if you like
+      MYSQL_USER: 'user'
+      # You can use whatever password you like
+      MYSQL_PASSWORD: 'password'
+      # Password for root access
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      # <Port exposed> : <MySQL Port running inside container>
+      - '3306:3306'
+    expose:
+      # Opens port 3306 on the container
+      - '3306'
+      # Where our data will be persisted
+    volumes:
+      - my-db:/var/lib/mysql
+      
+  db1:
+    image: postgres:14.1-alpine
+    container_name: Postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5432:5432'
+    
+    expose:
+      # Opens port 3306 on the container
+      - '5432'
+      # Where our data will be persisted
+    volumes: 
+      - my-db1:/var/lib/postgresql/data
+
+  db2:
+    image: oracleinanutshell/oracle-xe-11g:latest
+    container_name: oracle
+    ports:
+      - '1521:1521'
+      #- '5500:5500'
+      - '8088:8080'
+    environment: 
+      - ORACLE_ALLOW_REMOTE=true
+      - ORACLE_ENABLE_XDB=true
+    
+    expose:
+      # Opens port 3306 on the container
+      - '1521'
+      # Where our data will be persisted
+    volumes: 
+      - my-db2:/var/lib/app/oracle
+
+
+# Names our volume
+volumes:
+    my-db:
+    my-db1:
+    my-db2:

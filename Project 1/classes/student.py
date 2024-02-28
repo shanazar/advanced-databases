@@ -2,7 +2,7 @@
 class Student:
 
     def __init__(self, num_id: int, name: str, age: int, gender: str, city: str):
-        self.num_id = num_id
+        self.num_id = int(num_id)
         self.name = name
         self.age = age
         self.gender = gender
@@ -34,3 +34,9 @@ class Student:
 
     def get_city(self) -> str:
         return self.city
+
+    def __str__(self):
+        return f"{self.num_id}"
+
+    def __repr__(self):
+        return f"{self.num_id}"

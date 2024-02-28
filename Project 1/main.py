@@ -1,5 +1,14 @@
-from classes import Student, BTreeNode
+from classes import Student, BTree
+import csv
+students = []
+with open('./data/stud_record.csv', 'r', encoding='utf-8-sig') as rf:
+    reader = csv.DictReader(rf, delimiter=',')
+    for row in reader:
+        students.append(Student(num_id=row['number'], name=row['name'], age=row['age'], gender=row['gender'], city=row['city']))
 
-student = Student(num_id=0, name='Su Ema', age=30, gender='M', city='Singapore')
 
-print(student.get_name())
+b_tree = BTree(degree=3)
+
+for student in students[:8]:
+    b_tree.insert(student)
+print(b_tree)

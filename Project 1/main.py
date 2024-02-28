@@ -9,7 +9,7 @@ with open('./data/stud_record.csv', 'r', encoding='utf-8-sig') as rf:
 
 b_tree = BTree(degree=3)
 
-for student in students[:25]:
+for student in students[:50]:
     b_tree.insert(student)
     print(f'Insert value: {student}')
     print(b_tree)

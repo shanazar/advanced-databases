@@ -21,7 +21,7 @@ class BTree:
             insertion_node.insert_key(value)
             return
         # No space, split the node and find a new target
-        add_value, new_node = insertion_node.split_node()
+        add_value, new_node = insertion_node.split_node(value)
         if insertion_node == self.root:
             self.root = BTreeNode(leaf=False, degree=self.degree)
             self.root.insert_key(add_value)
@@ -32,14 +32,12 @@ class BTree:
             self.root.add_child(new_node)
 
         if not self.root.has_available_key_space():
-            print('Fucking with the root node')
             old_root = self.root
             add_value, new_node = self.root.split_node()
             self.root = BTreeNode(leaf=False, degree=self.degree)
             self.root.insert_key(add_value)
             self.root.add_child(old_root)
             self.root.add_child(new_node)
-        self.insert(value)
         return
 
     def find_insertion_node(self, value: Student) -> BTreeNode:
@@ -54,7 +52,7 @@ class BTree:
                       and traversed_node.get_key(i).get_id() < value.get_id() < traversed_node.get_key(i + 1).get_id()):
                     traversed_node = traversed_node.get_child(i + 1)
                     break
-                else:
+                elif i + 1 == len(traversed_node.get_keys()):
                     traversed_node = traversed_node.get_child(-1)
                     break
 

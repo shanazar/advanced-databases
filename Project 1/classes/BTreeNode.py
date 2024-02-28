@@ -1,3 +1,5 @@
+from typing import Tuple, Any
+
 from classes import Student
 import bisect
 
@@ -16,46 +18,26 @@ class BTreeNode:
         self.leaf = leaf
 
     def insert_key(self, key: Student) -> None:
-        if self.leaf:
-            bisect.insort(self.keys, key, key=lambda x: x.num_id)
+        bisect.insort(self.keys, key, key=lambda x: x.num_id)
 
-        if not self.has_available_space():
-            self.split_child()
-            self.set_leaf(False)
-            return
+    def split_node(self):
+        extracted_key = self.keys.pop((len(self.keys) // 2))
+        new_node = BTreeNode(leaf=True, degree=self.degree)
+        for i in range(len(self.keys) // 2):
+            new_node.insert_key(self.keys.pop(0))
+        return extracted_key, new_node
 
-        if key.get_id() > self.keys[-1].get_id():
-            self.children[-1].insert_key(key)
-            return
-
-        if key.get_id() < self.keys[0].get_id():
-            self.children[0].insert_key(key)
-            return
-
-    def split_child(self) -> Student:
-        print(f'Splitting on keys: {self.keys}')
-        left_child = BTreeNode(leaf=True, degree=self.degree)
-        right_child = BTreeNode(leaf=True, degree=self.degree)
-        middle_index = len(self.keys) // 2
-
-        for i in range(0, middle_index):
-            left_child.insert_key(self.keys.pop(0))
-
-        self.add_child(left_child)
-
-        for i in range(len(self.keys) - 1):
-            right_child.insert_key(self.keys.pop(-1))
-
-        self.add_child(right_child)
-
-    def add_child(self, child: Student) -> None:
-        self.children.append(child)
+    def add_child(self, child) -> None:
+        bisect.insort(self.children, child, key=lambda x: x.get_key(0).get_id())
 
     def is_leaf(self) -> bool:
         return self.leaf
 
     def get_keys(self) -> list:
         return self.keys
+
+    def get_key(self, index) -> Student:
+        return self.keys[index]
 
     def get_child(self, index: int) -> Student:
         return self.children[index]
@@ -64,13 +46,16 @@ class BTreeNode:
         return self.children
 
     def get_number_of_children(self) -> int:
-        return sum(x is not None for x in self.children)
+        return len(self.children)
 
     def get_number_of_keys(self) -> int:
         return len(self.keys)
 
-    def has_available_space(self) -> bool:
+    def has_available_key_space(self) -> bool:
         return len(self.keys) < (2 * self.degree - 1)
+
+    def has_available_child_space(self) -> bool:
+        return len(self.children) < (2 * self.degree)
 
     def __str__(self) -> str:
         return str()

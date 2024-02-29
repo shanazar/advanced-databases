@@ -48,15 +48,15 @@ class BTree:
         traversed_node: BTreeNode = self.root
         # Node traversal
         while not traversed_node.is_leaf():
-            for i in range(len(traversed_node.get_keys())):
+            for i in range(traversed_node.get_number_of_keys()):
                 if value.get_id() < traversed_node.get_key(i).get_id():
                     traversed_node = traversed_node.get_child(i)
                     break
-                elif (i + 1 < len(traversed_node.get_keys())
+                elif (i + 1 < traversed_node.get_number_of_keys()
                       and traversed_node.get_key(i).get_id() < value.get_id() < traversed_node.get_key(i + 1).get_id()):
                     traversed_node = traversed_node.get_child(i + 1)
                     break
-                elif i + 1 == len(traversed_node.get_keys()):
+                elif i + 1 == traversed_node.get_number_of_keys():
                     traversed_node = traversed_node.get_child(-1)
                     break
 
@@ -76,10 +76,10 @@ class BTree:
             return_str += f'{str(child.get_keys())}{" " * level * 3}'
         if not has_neighbors:
             return_str += '\n'
-        for i in range(len(node.get_children())):
+        for i in range(node.get_number_of_children()):
             child = node.get_child(i)
             return_str += self.__repr__(child, level=level + 1, index=index + i,
-                                        has_neighbors=(len(node.get_children()) > 1))
+                                        has_neighbors=(node.get_number_of_children() > 1))
 
         return return_str
 

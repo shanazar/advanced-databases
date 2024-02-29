@@ -1,6 +1,6 @@
 from classes import Student, BTree
 import csv
-import pickle
+
 students = []
 with open('./data/stud_record.csv', 'r', encoding='utf-8-sig') as rf:
     reader = csv.DictReader(rf, delimiter=',')

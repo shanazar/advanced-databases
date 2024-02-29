@@ -1,5 +1,3 @@
-from typing import Tuple, Any
-
 from classes import Student
 import bisect
 
@@ -23,13 +21,13 @@ class BTreeNode:
     def split_node(self, value: Student = None, leaf: bool = True):
         if value:
             self.insert_key(value)
-            extracted_key = self.keys.pop((len(self.keys) // 2) - 1)
+            extracted_key = self.keys.pop(self.get_number_of_keys() // 2 - 1)
         else:
-            extracted_key = self.keys.pop((len(self.keys) // 2))
+            extracted_key = self.keys.pop(self.get_number_of_keys() // 2)
         new_node = BTreeNode(leaf=leaf, degree=self.degree)
-        for i in range(len(self.keys) // 2):
+        for i in range(self.get_number_of_keys() // 2):
             new_node.insert_key(self.keys.pop(0))
-        for i in range(len(self.children) // 2):
+        for i in range(self.get_number_of_children() // 2):
             new_node.add_child(self.children.pop(0))
         return extracted_key, new_node
 

@@ -18,17 +18,15 @@ class BTreeNode:
     def insert_key(self, key: Student) -> None:
         bisect.insort(self.keys, key, key=lambda x: x.num_id)
 
-    def split_node(self, value: Student = None, leaf: bool = True):
-        if value:
-            self.insert_key(value)
-            extracted_key = self.keys.pop(self.get_number_of_keys() // 2 - 1)
-        else:
-            extracted_key = self.keys.pop(self.get_number_of_keys() // 2)
-        new_node = BTreeNode(leaf=leaf, degree=self.degree)
+    def split_node(self):
+        extracted_key = self.keys.pop(self.get_number_of_keys() // 2)
+        new_node = BTreeNode(leaf=True, degree=self.degree)
         for i in range(self.get_number_of_keys() // 2):
             new_node.insert_key(self.keys.pop(0))
         for i in range(self.get_number_of_children() // 2):
             new_node.add_child(self.children.pop(0))
+        if new_node.get_number_of_children() > 0:
+            new_node.set_leaf(False)
         return extracted_key, new_node
 
     def add_child(self, child) -> None:
@@ -36,6 +34,9 @@ class BTreeNode:
 
     def is_leaf(self) -> bool:
         return self.leaf
+
+    def set_is_leaf(self, value: bool) -> None:
+        self.leaf = value
 
     def get_keys(self) -> list:
         return self.keys

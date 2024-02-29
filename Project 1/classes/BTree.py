@@ -13,17 +13,16 @@ class BTree:
             self.root = BTreeNode(leaf=True, degree=self.degree)
         insertion_node = self.find_insertion_node(value)
         # If node has space, then all's good, insert the value and move on
-        if insertion_node.has_available_key_space():
-            insertion_node.insert_key(value)
-            return
-
+        insertion_node.insert_key(value)
         while not insertion_node.has_available_key_space():
+            print(insertion_node.get_keys())
             parent_node = self.find_parent_node(insertion_node)
             insertion_node = self.split_child(parent_node, insertion_node)
+            print('allo', insertion_node.get_keys())
         return
 
-    def split_child(self, parent_node: BTreeNode, child_node: BTreeNode, value: Student = None) -> BTreeNode:
-        add_value, new_node = child_node.split_node(value)
+    def split_child(self, parent_node: BTreeNode, child_node: BTreeNode) -> BTreeNode:
+        add_value, new_node = child_node.split_node()
         if not parent_node:
             parent_node = BTreeNode(leaf=False, degree=self.degree)
         parent_node.insert_key(add_value)
@@ -41,7 +40,9 @@ class BTree:
             return search_node
         for child in search_node.get_children():
             if not child.is_leaf():
-                return self.find_parent_node(node, child)
+                result = self.find_parent_node(node, child)
+                if result is not None:
+                    return result
         return None
 
     def find_insertion_node(self, value: Student) -> BTreeNode:
@@ -56,11 +57,24 @@ class BTree:
                       and traversed_node.get_key(i).get_id() < value.get_id() < traversed_node.get_key(i + 1).get_id()):
                     traversed_node = traversed_node.get_child(i + 1)
                     break
+
                 elif i + 1 == traversed_node.get_number_of_keys():
                     traversed_node = traversed_node.get_child(-1)
                     break
 
         return traversed_node
+
+    def search(self, id: int, node: BTreeNode = None) -> Student:
+        if node is None:
+            node = self.root
+        i = 0
+        while i < node.get_number_of_keys() and id > node.get_key(i).get_id():
+            i += 1
+        if i < node.get_number_of_keys() and id == node.get_key(i).get_id():
+            return node.get_key(i)
+        if node.is_leaf():
+            return None
+        return self.search(id, node.get_child(i))
 
     def __repr__(self, node=None, level=0, index=0, has_neighbors=False):
         if not node:

@@ -68,17 +68,17 @@ def analys_queues():
     print("Testing Unsorted Queue")
     unsorted_queue = Queue()
     b_tree = BTree(order=16)
+    sorted_queue = SortedQueue()
     for student in students:
         unsorted_queue.enqueue(student)
         b_tree.insert(student)
+        sorted_queue.enqueue(student)
     logger("Unsorted Queue", unsorted_queue)
 
     # Test Sorted Queue
     print("\nTesting Sorted Queue")
-    sorted_queue = SortedQueue()
-    for student in students:
-        sorted_queue.enqueue(student)
     logger("Sorted Queue", sorted_queue)
+    print("\nTesting BTree")
     logger('BTree', b_tree)
 
 analys_queues()

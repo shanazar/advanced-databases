@@ -24,6 +24,10 @@ def enqueue_student(queue, student):
     queue.enqueue(student)
 
 @measure_time
+def insert_student(brtee: BTree, student):
+    brtee.insert(student)
+
+@measure_time
 def search_student(queue, num_id):
     return queue.search(num_id)
 
@@ -41,14 +45,20 @@ def logger(name, data_structure, avg_count=1000):
     delete = []
     for i in range(avg_count):
         copy_of_ds = copy.deepcopy(data_structure)
-        _, insert_time_unsorted = enqueue_student(copy_of_ds, student_to_insert)
+        if name == 'BTree':
+            _, insert_time_unsorted = insert_student(copy_of_ds, student_to_insert)
+        else:
+            _, insert_time_unsorted = enqueue_student(copy_of_ds, student_to_insert)
         _, search_time_unsorted = search_student(copy_of_ds, student_to_search.num_id)
         _, delete_time_unsorted = delete_student(copy_of_ds, student_to_delete.num_id)
         insert.append(insert_time_unsorted)
         search.append(search_time_unsorted)
         delete.append(delete_time_unsorted)
 
-    print(f"Initial {name} size:", data_structure.size())
+    if name == 'BTree':
+        print(f"Initial {name} size:", len(data_structure.get_as_list()))
+    else:
+        print(f"Initial {name} size:", data_structure.size())
     print(f"Time to insert in {name}: {sum(insert)/avg_count}")
     print(f"Time to search in {name}: {sum(search)/avg_count}")
     print(f"Time to delete in {name}: {sum(delete)/avg_count}")
@@ -57,8 +67,10 @@ def analys_queues():
     # Test Unsorted Queue
     print("Testing Unsorted Queue")
     unsorted_queue = Queue()
+    b_tree = BTree(order=16)
     for student in students:
         unsorted_queue.enqueue(student)
+        b_tree.insert(student)
     logger("Unsorted Queue", unsorted_queue)
 
     # Test Sorted Queue
@@ -67,13 +79,7 @@ def analys_queues():
     for student in students:
         sorted_queue.enqueue(student)
     logger("Sorted Queue", sorted_queue)
-
-    """    
-    b_tree = BTree(order=5)
-    expected_len = 0
-    for student in students:
-        b_tree.insert(student)
-        expected_len += 1"""
+    logger('BTree', b_tree)
 
 analys_queues()
 

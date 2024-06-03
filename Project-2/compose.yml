@@ -22,3 +22,15 @@ services:
       # Where our data will be persisted
     volumes:
       - ./tpcc/database:/storage/tpc/sql/
+
+  postgres:
+      image: postgres:14.1-alpine
+      container_name: Postgres
+      restart: always
+      environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+      ports:
+        - '5432:5432'
+      volumes:
+        - ./tpcc/database:/storage/tpc/sql/

@@ -1,0 +1,33 @@
+<Raw Results>
+  |NewOrder| sc:2382  lt:0  rt:0  fl:0
+  |Payment| sc:2383  lt:0  rt:0  fl:0
+  |Order Stat| sc:238  lt:0  rt:0  fl:0
+  |Delivery| sc:238  lt:0  rt:0  fl:0
+  |Slev| sc:237  lt:0  rt:0  fl:0
+ in 60,766998 sec.
+<Raw Results2(sum ver.)>
+  |NewOrder| sc:2382  lt:0  rt:0  fl:0
+  |Payment| sc:2383  lt:0  rt:0  fl:0
+  |Order Stat| sc:238  lt:0  rt:0  fl:0
+  |Delivery| sc:238  lt:0  rt:0  fl:0
+  |Slev| sc:237  lt:0  rt:0  fl:0
+<Constraint Check> (all must be [OK])
+ [transaction percentage]
+        Payment: 43,501278% (>=43.0%) [OK]
+   Order-Status: 4,344651% (>= 4.0%) [OK]
+       Delivery: 4,344651% (>= 4.0%) [OK]
+    Stock-Level: 4,326396% (>= 4.0%) [OK]
+ [response time (at least 90% passed)]
+      NewOrder: 100,000000%  [OK]
+      Payment: 100,000000%  [OK]
+      Order Stat: 100,000000%  [OK]
+      Delivery: 100,000000%  [OK]
+      Slev: 100,000000%  [OK]
+ NewOrder Total: 2382
+ Payment Total: 2383
+ Order Stat Total: 238
+ Delivery Total: 238
+ Slev Total: 237
+
+<TpmC>
+2351.9343 TpmC
